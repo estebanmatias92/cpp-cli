@@ -1,6 +1,6 @@
-# C/C++ Docker (Compose) Dev Environment
+# C/C++ Docker Dev Environment
 
-An isolated Docker Development Environment stack for building C/C++ Apps.
+An isolated Docker Development Environment for building C/C++ CLI Apps.
 
 ## Use
 
@@ -18,7 +18,7 @@ _`./app/build_and_start.sh`_
 
 ## Folder structure
 
-I use the [The Pitchfork Layout (PFL)](https://api.csswg.org/bikeshed/?force=1&url=https://raw.githubusercontent.com/vector-of-bool/pitchfork/develop/data/spec.bs) in order to structure the project. 
+I use the [The Pitchfork Layout (PFL)](https://api.csswg.org/bikeshed/?force=1&url=https://raw.githubusercontent.com/vector-of-bool/pitchfork/develop/data/spec.bs) in order to structure the project.
 
 Modules/Libraries names must be the same as the directory name in which they are.
 

@@ -1,5 +1,5 @@
 # My custom function to list all subdirs with a CMakeList.txt file in it
-get_subdirectories(LIBRARIES ${CMAKE_CURRENT_LIST_DIR})
+get_subdirectories(modules ${CMAKE_CURRENT_LIST_DIR})
 
 # Creating executable Target
 add_executable(${PROJECT_NAME} main.cpp)
@@ -9,4 +9,4 @@ add_subdirectories(${CMAKE_CURRENT_LIST_DIR})
 
 # Link the libraries to this Target
 target_link_libraries(${PROJECT_NAME}
-    PRIVATE ${LIBRARIES})
+    PRIVATE ${modules})

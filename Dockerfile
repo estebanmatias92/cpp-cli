@@ -8,6 +8,7 @@ LABEL description="Installing dependencies..."
 # Arguments
 ARG PROJECT_NAME="cppcli"
 ARG CMAKE_VERSION="3.18"
+
 # Sotring the variables in the container
 ENV CMAKE_VERSION=$CMAKE_VERSION
 ENV PROJECT_NAME=$PROJECT_NAME
@@ -79,15 +80,11 @@ FROM debian:stable-slim
 
 LABEL description="Creating runtime container..."
 
-# Get the Environment Variable
-ARG PROJECT_NAME
-ENV PROJECT_NAME=$PROJECT_NAME
-
 # Create production ready folder for the binaries and change directory
 WORKDIR /usr/local/app
 
 # Copy the binaries from the build to the current directory
 COPY --from=builder /workdir/app/build .
-    
+
 # Execute the app
-CMD ./src/${PROJECT_NAME}
+CMD ./src/cppcli

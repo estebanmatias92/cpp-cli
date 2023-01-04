@@ -1,6 +1,6 @@
 #pragma once
 
-
-namespace e92app {
+namespace app
+{
     void run();
 }

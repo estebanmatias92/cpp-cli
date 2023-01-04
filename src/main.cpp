@@ -4,7 +4,7 @@
 int main()
 {
     // Use an example library to start the app
-    e92app::run();
+    app::run();
 
     return 0;
 }

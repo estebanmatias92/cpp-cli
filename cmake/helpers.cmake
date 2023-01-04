@@ -57,3 +57,12 @@ endfunction()
 #    set(${parsed} ${new_message} PARENT_SCOPE)
 #endfunction()
 #
+
+
+# Get folder name
+function(get_folder_name name)
+    get_filename_component(folder_name ${CMAKE_CURRENT_LIST_DIR} NAME)
+
+    set(${name} ${folder_name})
+    set(${name} ${${name}} PARENT_SCOPE)
+endfunction()
