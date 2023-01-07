@@ -9,4 +9,4 @@ add_subdirectories(${CMAKE_CURRENT_LIST_DIR})
 
 # Link the libraries to this Target
 target_link_libraries(${PROJECT_NAME}
-    PRIVATE ${modules})
+        PUBLIC ${modules})

@@ -8,7 +8,7 @@ An isolated Docker Development Environment for building C/C++ CLI Apps.
 
 **Compile and run service interactively:**
 
-_`docker compose build cli && docker compose run --rm cli`_
+_`docker compose build app && docker compose run --rm app`_
 
 ### Inside the dev-environment
 

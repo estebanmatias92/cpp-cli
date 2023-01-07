@@ -1,90 +1,77 @@
-#
-# Base Stage
-#
-FROM gcc:11 as base
-
-LABEL description="Installing dependencies..."
-
-# Arguments
-ARG PROJECT_NAME="cppcli"
+ARG PROJECT_NAME="cppner"
 ARG CMAKE_VERSION="3.18"
 
-# Sotring the variables in the container
-ENV CMAKE_VERSION=$CMAKE_VERSION
-ENV PROJECT_NAME=$PROJECT_NAME
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        binutils \
-        cmake \
-        libboost-dev \
-        ninja-build \
-    && apt-get clean
-
+FROM estebanmatias92/gccplus:latest as buildeps
+FROM estebanmatias92/gccplus-coding:latest as devdeps
 
 
 #
-# Build Stage
+# Image to compile the source code to binary
 #
-FROM base as builder
+FROM buildeps as builder
 
-LABEL description="Building project..."
+ARG PROJECT_NAME
+ARG CMAKE_VERSION
 
-# Create folder for app service and change directory
-WORKDIR /workdir/app
+ENV PROJECT_NAME=${PROJECT_NAME}
+ENV CMAKE_VERSION=${CMAKE_VERSION}
 
-# Copying all the files from app to container's workdir
+WORKDIR /project
+
 COPY . .
 
-# Build the binaries
-RUN chmod +x ./build_and_start.sh && ./build_and_start.sh
+# Sh-ell source the script and run the build function
+RUN . ./build.sh && build
 
+
+#
+# Preparing the runtime artifacs
+#
+FROM debian:stable-slim as runtime
+
+WORKDIR /root/app
+
+# Copy the binaries from the build to the current directory
+COPY --from=builder /project/build/ .
 
 
 #
 # VS Code Stage 
 # (This is preferred to run as a Docker Dev Environment)
 #
-FROM base AS development
+FROM devdeps AS development
 
-# Get packages for editors and CVS
-RUN apt-get update && apt-get install -y \
-        cppcheck \
-        flawfinder \
-        git \
-        gdb \
-    && apt-get clean
+ARG PROJECT_NAME
+ARG CMAKE_VERSION
+ARG WORKDIR=/com.docker.devenvironments.code
 
-COPY build_and_start.sh .
-
-RUN chmod +x ./build_and_start.sh
+ENV PROJECT_NAME=${PROJECT_NAME}
+ENV CMAKE_VERSION=${CMAKE_VERSION}
 
 # Create and change user
-ARG VSCODEUSER="vscode"
+ARG DEVUSER="nonroot"
 
-RUN useradd -s /bin/bash -m $VSCODEUSER \
+RUN useradd -s /bin/bash -m $DEVUSER \
     && groupadd docker \
-    && usermod -aG docker $VSCODEUSER
+    && usermod -aG docker $DEVUSER
 
-USER $VSCODEUSER
+USER $DEVUSER
+
+COPY --chown=${DEVUSER}:docker build.sh ${WORKDIR}/
+RUN echo "\n#Souce script for building\n. ${WORKDIR}/build.sh" >> $HOME/.bashrc 
 
 # Keep the container alive
 CMD ["sleep", "infinity"]
-
 
 
 #
 # Production Target Stage 
 # Normally called without specifying "target" in compose
 #
-FROM debian:stable-slim
+FROM runtime as production
 
-LABEL description="Creating runtime container..."
+ARG PROJECT_NAME
+ENV PROJECT_NAME=${PROJECT_NAME}
 
-# Create production ready folder for the binaries and change directory
-WORKDIR /usr/local/app
-
-# Copy the binaries from the build to the current directory
-COPY --from=builder /workdir/app/build .
-
-# Execute the app
-CMD ./src/cppcli
+# Run the container as an executable
+ENTRYPOINT ./src/${PROJECT_NAME}
