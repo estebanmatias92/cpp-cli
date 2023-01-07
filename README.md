@@ -15,9 +15,9 @@ There are three main stages, _Builder_, _Development_ and _Production_. (see [./
 
 This option will run the production container, it acts as an executable.
 
-**Compile and run service with compose:**
+**Build (1st time) and run service with compose:**
 
-_`docker compose build app && docker compose run --rm app`_
+_`docker compose run --rm app`_
 
 ### Inside the dev-environment
 
