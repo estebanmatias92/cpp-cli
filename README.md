@@ -1,20 +1,31 @@
 # C/C++ Docker Dev Environment
 
-An isolated Docker Development Environment for building C/C++ CLI Apps.
+Docker Compose template to build an app/service with vanilla C/C++.
+
+You can change the **project_name** and the **cmake_version** from the Dockerfile or with args from the docker compose CLI commands.
 
 ## Use
 
+There are three main stages, _Builder_, _Development_ and _Production_. (see [./Dockerfile](https://github.com/estebanmatias92/vanilla-cppner-boilerplate/blob/main/Dockerfile))
+**Builder:** is used to compile the source files and it is used by other stages/images.
+**Development:** is used to set the dev dependencies and system user for the IDE.
+**Production:** is a slim version of debian that pulls the binaries and can only run the executable.
+
 ### From outside the container/dev-environment
 
-**Compile and run service interactively:**
+This option will run the production container, it acts as an executable.
+
+**Compile and run service with compose:**
 
 _`docker compose build app && docker compose run --rm app`_
 
 ### Inside the dev-environment
 
-**Compile and run from a C++ environment:**
+The _Development_ stage is where the build script ([./build.sh](https://github.com/estebanmatias92/vanilla-cppner-boilerplate/blob/main/build.sh)) is sourced, so only from that stage you can use the next commands, and they are sourced by **$HOME/.bashrc** so only **bash** shell (not sh) have them available.
 
-_`./app/build_and_start.sh`_
+**Compile and run within the C/C++ environment:**
+
+_`/bin/bash build && run`_
 
 ## Folder structure
 
