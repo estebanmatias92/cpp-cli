@@ -14,7 +14,7 @@ project(${PROJECT_NAME} LANGUAGES CXX)
 add_library(${PROJECT_NAME} SHARED)
 
 # Link the include directory to the target
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/include)
+target_include_directories(${PROJECT_NAME} PUBLIC ./include)
 
 # Add source and include directories
 #add_subdirectory(include)
