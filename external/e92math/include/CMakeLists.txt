@@ -6,3 +6,5 @@
 #    TREE ${CMAKE_CURRENT_LIST_DIR}
 #    PREFIX "Header Files"
 #    FILES ${headers})
+
+install(FILES e92math.hpp DESTINATION include)

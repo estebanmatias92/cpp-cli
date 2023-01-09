@@ -1,6 +1,7 @@
 # Build arguments
 ARG PROJECT_NAME="cppner"
 ARG CMAKE_VERSION="3.18"
+ARG buildpath="./build"
 # Image dependencies
 FROM estebanmatias92/gccplus:latest as buildeps
 FROM estebanmatias92/gccplus-coding:latest as devdeps
@@ -13,25 +14,27 @@ FROM buildeps as builder
 # Modifyble through cli args
 ARG PROJECT_NAME
 ARG CMAKE_VERSION
+ARG buildpath
 # Runtime usage
 ENV PROJECT_NAME=${PROJECT_NAME}
 ENV CMAKE_VERSION=${CMAKE_VERSION}
+ENV buildpath=${buildpath}
 
-WORKDIR /project
+WORKDIR /code
 # Pull the source code
 COPY . .
 # Add the build script commands to the shell session and run the build instruction
-RUN . ./build.sh && build
+RUN ./build.sh && ./install.sh
 
 
 #
 # Preparing the runtime artifacs
 #
 FROM debian:stable-slim as runtime
-
-WORKDIR /root/app
 # Copy the binaries from the build to the current directory
-COPY --from=builder /project/build/ .
+COPY --from=builder /usr/local /usr/local
+# Regenerate the shared-library cache.
+RUN ldconfig
 
 
 #
@@ -43,18 +46,20 @@ FROM devdeps AS development
 ARG PROJECT_NAME
 ARG CMAKE_VERSION
 ARG WORKDIR=/com.docker.devenvironments.code
+ARG buildpath
 # Runtime usage
 ENV PROJECT_NAME=${PROJECT_NAME}
 ENV CMAKE_VERSION=${CMAKE_VERSION}
+ENV buildpath=${buildpath}
 # Create and change user
-ARG DEVUSER="nonroot"
+ARG DEVUSER="vscode"
 RUN useradd -s /bin/bash -m $DEVUSER \
     && groupadd docker \
     && usermod -aG docker $DEVUSER
 USER $DEVUSER
 # Get the build script commands added to the shell session
-COPY --chown=${DEVUSER}:docker build.sh ${WORKDIR}/
-RUN echo "\n#Add script for building\n. ${WORKDIR}/build.sh" >> $HOME/.bashrc 
+COPY --chown=${DEVUSER}:docker script.sh ${WORKDIR}/
+RUN echo "\n#Add script for building\n. ${WORKDIR}/script.sh" >> $HOME/.bashrc 
 # Keep the container alive
 CMD ["sleep", "infinity"]
 
@@ -68,4 +73,4 @@ FROM runtime as production
 ARG PROJECT_NAME
 ENV PROJECT_NAME=${PROJECT_NAME}
 # Run the container as an executable
-ENTRYPOINT ./src/${PROJECT_NAME}
+ENTRYPOINT ${PROJECT_NAME}

@@ -17,5 +17,8 @@ add_library(${PROJECT_NAME} SHARED)
 target_include_directories(${PROJECT_NAME} PUBLIC ./include)
 
 # Add source and include directories
-#add_subdirectory(include)
 add_subdirectory(src)
+add_subdirectory(include)
+
+# Instructions for installing this library
+install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION lib)

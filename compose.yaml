@@ -1,3 +1,4 @@
+name: cppner
 services:
   app:
     build: .
