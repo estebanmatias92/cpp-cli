@@ -6,7 +6,7 @@ You can change the **project_name** and the **cmake_version** from the Dockerfil
 
 ## Use
 
-There are three main stages, _Builder_, _Development_ and _Production_. (see [./Dockerfile](https://github.com/estebanmatias92/vanilla-cppner-boilerplate/blob/main/Dockerfile))<br/>
+There are three main stages, _Builder_, _Development_ and _Production_. (see [Dockerfile](https://github.com/estebanmatias92/vanilla-cppner-boilerplate/blob/main/Dockerfile))<br/>
 **Builder:** is used to compile the source files and it is used by other stages/images.<br/>
 **Development:** is used to set the dev dependencies and system user for the IDE.<br/>
 **Production:** is a slim version of debian that pulls the binaries and can only run the executable.
@@ -21,7 +21,7 @@ _`docker compose run --rm app`_
 
 ### Inside the dev-environment
 
-The _Development_ stage is where the build script ([./build.sh](https://github.com/estebanmatias92/vanilla-cppner-boilerplate/blob/main/build.sh)) is sourced, so only from that stage you can use the next commands, and they are sourced by **$HOME/.bashrc** so only **bash** shell (not sh) have them available.
+The _Development_ stage is where the build script ([build.sh](https://github.com/estebanmatias92/vanilla-cppner-boilerplate/blob/main/build.sh)) is sourced, so only from that stage you can use the next commands, and they are sourced by **$HOME/.bashrc** so only **bash** shell (not sh) have them available.
 
 **Compile and run within the C/C++ environment:**
 
