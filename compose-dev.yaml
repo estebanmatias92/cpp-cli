@@ -4,3 +4,6 @@ services:
     build:
       context: .
       target: development
+    env_file: .env
+    environment:
+      - PROJECT_NAME=${COMPOSE_PROJECT_NAME}

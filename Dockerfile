@@ -1,7 +1,3 @@
-# Build arguments
-ARG PROJECT_NAME="cppner"
-ARG CMAKE_VERSION="3.18"
-ARG buildpath="./build"
 # Image dependencies
 FROM estebanmatias92/gccplus:latest as buildeps
 FROM estebanmatias92/gccplus-coding:latest as devdeps
@@ -15,10 +11,6 @@ FROM buildeps as builder
 ARG PROJECT_NAME
 ARG CMAKE_VERSION
 ARG buildpath
-# Runtime usage
-ENV PROJECT_NAME=${PROJECT_NAME}
-ENV CMAKE_VERSION=${CMAKE_VERSION}
-ENV buildpath=${buildpath}
 
 WORKDIR /code
 # Pull the source code
@@ -43,22 +35,15 @@ RUN ldconfig
 #
 FROM devdeps AS development
 # Modifyble through cli args
-ARG PROJECT_NAME
-ARG CMAKE_VERSION
 ARG WORKDIR=/com.docker.devenvironments.code
-ARG buildpath
-# Runtime usage
-ENV PROJECT_NAME=${PROJECT_NAME}
-ENV CMAKE_VERSION=${CMAKE_VERSION}
-ENV buildpath=${buildpath}
+ARG DEV_USER="vscode"
 # Create and change user
-ARG DEVUSER="vscode"
-RUN useradd -s /bin/bash -m $DEVUSER \
+RUN useradd -s /bin/bash -m $DEV_USER \
     && groupadd docker \
-    && usermod -aG docker $DEVUSER
-USER $DEVUSER
+    && usermod -aG docker $DEV_USER
+USER $DEV_USER
 # Get the build script commands added to the shell session
-COPY --chown=${DEVUSER}:docker script.sh ${WORKDIR}/
+COPY --chown=${DEV_USER}:docker script.sh ${WORKDIR}/
 RUN echo "\n#Add script for building\n. ${WORKDIR}/script.sh" >> $HOME/.bashrc 
 # Keep the container alive
 CMD ["sleep", "infinity"]
@@ -70,7 +55,5 @@ CMD ["sleep", "infinity"]
 #
 FROM runtime as production
 
-ARG PROJECT_NAME
-ENV PROJECT_NAME=${PROJECT_NAME}
 # Run the container as an executable
 ENTRYPOINT ${PROJECT_NAME}
