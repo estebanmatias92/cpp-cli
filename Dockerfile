@@ -36,14 +36,14 @@ RUN ldconfig
 FROM devdeps AS development
 # Modifyble through cli args
 ARG WORKDIR=/com.docker.devenvironments.code
-ARG DEV_USER="vscode"
+ARG USER="vscode"
 # Create and change user
-RUN useradd -s /bin/bash -m $DEV_USER \
+RUN useradd -s /bin/bash -m $USER \
     && groupadd docker \
-    && usermod -aG docker $DEV_USER
-USER $DEV_USER
+    && usermod -aG docker $USER
+USER $USER
 # Get the build script commands added to the shell session
-COPY --chown=${DEV_USER}:docker script.sh ${WORKDIR}/
+COPY --chown=$USER script.sh $WORKDIR
 RUN echo "\n#Add script for building\n. ${WORKDIR}/script.sh" >> $HOME/.bashrc 
 # Keep the container alive
 CMD ["sleep", "infinity"]
@@ -56,4 +56,4 @@ CMD ["sleep", "infinity"]
 FROM runtime as production
 
 # Run the container as an executable
-ENTRYPOINT ${PROJECT_NAME}
+ENTRYPOINT $PROJECT_NAME
