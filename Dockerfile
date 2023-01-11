@@ -24,7 +24,7 @@ RUN ./build.sh && ./install.sh
 #
 FROM debian:stable-slim as runtime
 # Copy the binaries from the build to the current directory
-COPY --from=builder /usr/local /usr/local
+COPY --from=builder /usr/local/ /usr/local/
 # Regenerate the shared-library cache.
 RUN ldconfig
 
@@ -43,8 +43,8 @@ RUN useradd -s /bin/bash -m $USER \
     && usermod -aG docker $USER
 USER $USER
 # Get the build script commands added to the shell session
-COPY --chown=$USER script.sh $WORKDIR
-RUN echo "\n#Add script for building\n. ${WORKDIR}/script.sh" >> $HOME/.bashrc 
+COPY --chown=$USER script.sh $WORKDIR/
+RUN echo "\n# Add script for building\n. ${WORKDIR}/script.sh" >> $HOME/.bashrc 
 # Keep the container alive
 CMD ["sleep", "infinity"]
 
