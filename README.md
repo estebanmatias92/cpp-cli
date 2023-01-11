@@ -2,7 +2,7 @@
 
 Docker Compose template to build an app/service with vanilla C/C++.
 
-You can change the **project_name** and the **cmake_version** from the Dockerfile or with args from the docker compose CLI commands.
+You can change the **project_name** and the **cmake_version** in the .env file and compose files or with args from the docker compose CLI commands.
 
 ## Use
 
