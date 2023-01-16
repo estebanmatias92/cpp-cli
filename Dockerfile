@@ -2,7 +2,6 @@
 FROM estebanmatias92/gccplus:latest as buildeps
 FROM estebanmatias92/gccplus-coding:latest as devdeps
 
-
 #
 # Image to compile the source code to binary
 #
@@ -54,6 +53,5 @@ CMD ["sleep", "infinity"]
 # Normally called without specifying "target" in compose
 #
 FROM runtime as production
-
 # Run the container as an executable
 ENTRYPOINT $PROJECT_NAME
