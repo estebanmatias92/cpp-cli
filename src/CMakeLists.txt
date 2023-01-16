@@ -14,4 +14,3 @@ target_link_libraries(${PROJECT_NAME} PUBLIC ${LIB_NAMES})
 
 # Instructions for installing this executable
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
-#set_target_properties(${PROJET_NAME} PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
