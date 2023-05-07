@@ -21,7 +21,7 @@ _`docker compose run --rm app`_
 
 ### Inside the dev-environment
 
-The _Development_ stage is where the build script ([build.sh](https://github.com/estebanmatias92/vanilla-cppner-boilerplate/blob/main/build.sh)) is sourced, so only from that stage you can use the next commands, and they are sourced by **$HOME/.bashrc** so only **bash** shell (not sh) have them available.
+All the bash scripts for dev workflow ([script.sh](https://github.com/estebanmatias92/vanilla-cppner-boilerplate/blob/main/script.sh), [install.sh](https://github.com/estebanmatias92/vanilla-cppner-boilerplate/blob/main/install.sh) and [build.sh](https://github.com/estebanmatias92/vanilla-cppner-boilerplate/blob/main/build.sh)) are source with **$HOME/.bashrc** in the _Development_ stage ([Dockerfile](https://github.com/estebanmatias92/vanilla-cppner-boilerplate/blob/main/Dockerfile)).
 
 **Compile and run within the C/C++ environment:**
 
